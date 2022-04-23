@@ -1,6 +1,6 @@
-# Author: Octavio Mesner
+# Author: Taylor Koda
 # 19-101 Recitation
-# 4/19/2019
+# 4/22/2022
 
 # This code shows how to (1) import a csv file
 # and (2) run logistic regression
@@ -47,7 +47,7 @@ table(cSec$us_citizen, cSec$age)
 set.seed(1234)
 
 # choose random rows
-testIndex <- sample(dim(cSec)[1], size = 20, replace = FALSE)
+testIndex <- sample(dim(cSec)[1], size = 500, replace = FALSE)
 
 # put those rows into a dataset
 testData <- cSec[testIndex,]
@@ -87,7 +87,7 @@ cSecProb <- predict(cSecFit, newdata = testData, type = "response")
 # output predictions, they're probabilities of a c-section
 cSecProb
 
-# if the probability > 0.5, we're going to predict a c-section, otherwise no
+# if the probability > 0.5, we're going to predict a Fruad, otherwise no
 cSecPred <- ifelse(cSecProb > 0.5, 1, 0)
 
 # take a side-by-side look
@@ -95,12 +95,13 @@ cbind(cSecProb, cSecPred)
 
 # how does this compare to the actual values?
 # look at all the values
-cbind(cSecPred, testData$Caesarian)
+cbind(cSecPred, testData$fraud_detected)
 
 # look at a table
-table(cSecPred, testData$Caesarian)
+table(cSecPred, testData$fraud_detected)
 
 # error rate
-sum(cSecPred != testData$Caesarian)/length(cSecPred)
+sum(cSecPred != testData$fraud_detected)/length(cSecPred)
 
-# try this for the autism dataset!
+
+
