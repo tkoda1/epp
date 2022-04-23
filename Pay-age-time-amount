@@ -21,25 +21,25 @@ list.files()
 # right place
 
 # Read in a csv file (should end with ".csv"), use this:
-cSec <- read.csv("creditCardTransactions (1).csv")
+cFraud <- read.csv("creditCardTransactions (1).csv")
 
 # Look at the first 6 rows using this:
-head(cSec)
+head(cFraud)
 
 # learn more about the data using this:
-str(cSec)
+str(cFraud)
 
 # How many c-sections where there?
-table(cSec$age)
+table(cFraud$age)
 
 # What is the mean age?
-mean(cSec$age)
+mean(cFraud$age)
 
 # What does this do?
-summary(cSec$age)
+summary(cFraud$age)
 
 # What does this do?
-table(cSec$us_citizen, cSec$age)
+table(cFraud$us_citizen, cFraud$age)
 
 # split data into a training set and a test set
 
@@ -47,24 +47,24 @@ table(cSec$us_citizen, cSec$age)
 set.seed(1234)
 
 # choose random rows
-testIndex <- sample(dim(cSec)[1], size = 500, replace = FALSE)
+testIndexC <- sample(dim(cFraud)[1], size = 500, replace = FALSE)
 
 # put those rows into a dataset
-testData <- cSec[testIndex,]
+testDC <- cFraud[testIndexC,]
 
 # put all other rows into a dataset
-trainData <- cSec[-testIndex,]
+trainDC <- cFraud[-testIndexC,]
 
 # Logistic Regression
 
 # Estimate the parameters for the logistic regression model
-cSecFit <- glm(fraud_detected ~ age + as.factor(payment_cat) + transac_time + transac_amount, data = trainData, family = "binomial")
+cFraudFit <- glm(fraud_detected ~ age + as.factor(payment_cat) + transac_time + transac_amount, data = trainDC, family = "binomial")
 
 # show output
-summary(cSecFit)
+summary(cFraudFit)
 
 # calculate confidence intervals
-confint(cSecFit)
+confint(cFraudFit)
 
 # This function takes the output from glm
 # Outputs a readable table
@@ -77,31 +77,31 @@ logTable <- function(fit){
 }
 
 # show output
-logTable(cSecFit)
+logTable(cFraudFit)
 
 # how do we interpret this table?
 
 # make predictions for test data about c-sections
-cSecProb <- predict(cSecFit, newdata = testData, type = "response")
+cFraudProb <- predict(cFraudFit, newdata = testDC, type = "response")
 
 # output predictions, they're probabilities of a c-section
-cSecProb
+cFraudProb
 
 # if the probability > 0.5, we're going to predict a Fruad, otherwise no
-cSecPred <- ifelse(cSecProb > 0.5, 1, 0)
+cFraudPred <- ifelse(cFraudProb > 0.5, 1, 0)
 
 # take a side-by-side look
-cbind(cSecProb, cSecPred)
+cbind(cFraudProb, cFraudPred)
 
 # how does this compare to the actual values?
 # look at all the values
-cbind(cSecPred, testData$fraud_detected)
+cbind(cFraudPred, testDC$fraud_detected)
 
 # look at a table
-table(cSecPred, testData$fraud_detected)
+table(cFraudPred, testDC$fraud_detected)
 
 # error rate
-sum(cSecPred != testData$fraud_detected)/length(cSecPred)
+sum(cFraudPred != testDC$fraud_detected)/length(cFraudPred)
 
 
 
