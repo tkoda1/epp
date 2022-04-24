@@ -1,0 +1,18 @@
+# load dataframe
+df <- read.csv("creditCardTransactions (1).csv")
+
+# create logistic regression model
+logistic_model <- glm(fraud_detected ~ transac_amount, data=df, family=binomial)
+
+#Data frame with hp in ascending order
+Predicted_data <- data.frame(transac_amount=seq(
+  min(df$transac_amount), max(df$transac_amount),len=1000))
+
+# Fill predicted values using regression model
+Predicted_data$fraud_detected = predict(
+  logistic_model, Predicted_data, type="response")
+
+# Plot Predicted data and original data points
+plot(fraud_detected ~ transac_amount, data=df)
+lines(fraud_detected ~ transac_amount, Predicted_data, lwd=2, col="pink")
+
